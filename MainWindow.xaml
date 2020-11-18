@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfApp"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="450" Width="900">
     
     <!-- Это информирует элемент управления Window о том, какие
     обработчики вызывать при поступлении команд Open и Save -->
@@ -89,6 +89,75 @@
                         </Canvas>
                     </StackPanel>
                 </Button>
+            </TabItem>
+            <TabItem Header="Ink API">
+                <StackPanel Background="#FFE5E5E5">
+                    <ToolBar Name="InkToolBar" Height="60">
+                        <Border Margin="0,2,0,2.4" Width="280" VerticalAlignment="Center">
+                            <WrapPanel>
+                                <RadioButton x:Name="inkRadio" Margin="5,10" Content="Ink Mode!" IsChecked="True" Click="RadioButtonClicked"/>
+                                <RadioButton x:Name="eraseRadio" Margin="5,10" Content="Erase Mode!"  Click="RadioButtonClicked"/>
+                                <RadioButton x:Name="selectRadio" Margin="5,10" Content="Select Mode!"  Click="RadioButtonClicked"/>
+                            </WrapPanel>
+                        </Border>
+                        <Separator/>
+                        <ComboBox x:Name="comboColors" Width="75" Margin="10,0,0,0" SelectionChanged="ColorChanged">
+                            <ComboBoxItem Content="Red"/>
+                            <ComboBoxItem Content="Green"/>
+                            <ComboBoxItem Content="Blue"/>
+                        </ComboBox>
+                        <Separator/>
+                        <ComboBox x:Name="comboColors2" Width="130" SelectionChanged="ColorChanged2">
+                            <StackPanel Orientation = "Horizontal" Tag="Red">
+                                <Ellipse Fill ="Red" Height ="50" Width ="50"/>
+                                <Label FontSize ="20" HorizontalAlignment="Center" VerticalAlignment="Center" Content="Red"/>
+                            </StackPanel>
+                            <StackPanel Orientation = "Horizontal" Tag="Green">
+                                <Ellipse Fill ="Green" Height ="50" Width ="50"/>
+                                <Label FontSize ="20" HorizontalAlignment="Center" VerticalAlignment="Center" Content="Green"/>
+                            </StackPanel>
+                            <StackPanel Orientation ="Horizontal" Tag="Blue">
+                                <Ellipse Fill ="Blue" Height ="50" Width ="50"/>
+                                <Label FontSize ="20" HorizontalAlignment="Center" VerticalAlignment="Center" Content="Blue"/>
+                            </StackPanel>
+                        </ComboBox>
+                        <Separator/>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Button Grid.Column="0" x:Name="btnSave" Margin="10,10" Width="70" Content="Save Data" Click="SaveData"/>
+                            <Button Grid.Column="1" x:Name="btnLoad" Margin="10,10" Width="70" Content="Load Data" Click="LoadData"/>
+                            <Button Grid.Column="2" x:Name="btnClear" Margin="10,10" Width="70" Content="Clear" Click="Clear"/>
+                        </Grid>
+                    </ToolBar>
+                    <InkCanvas x:Name="MyInkCanvas" Background="#FFB6F4F1" />
+                </StackPanel>
+            </TabItem>
+            <TabItem x:Name="tabDataBinding" Header="Data Binding">
+                <StackPanel Width="250">
+                    <Label Content="Move the scroll bar to see the current value"/>
+                    <!--Значение линейки прокрутки является источником этой привязки данных-->
+                    <ScrollBar x:Name="mySB" Orientation="Horizontal" Height="30" Minimum = "1" Maximum = "100" LargeChange = "1" SmallChange = "1"/>
+                    <!--Содержимое метки будет привязано к линейке прокрутки-->
+                    <Label x:Name="labelSBThumb" Height="30" BorderBrush="Blue" BorderThickness="2" Content = "{Binding Value, ElementName=mySB}" ContentStringFormat="The value is: {0:F0}"/>
+                    <!--Разбиение объекта и значения посредством DataContext-->
+                    <Label x:Name="labelSBThumb2" Height="30" BorderBrush="Blue" BorderThickness="2" DataContext = "{Binding ElementName=mySB}" Content = "{Binding Path=Value}"/>
+                </StackPanel>
+            </TabItem>
+            <TabItem Header="DataContext">
+                <!--Обратите внимание, что StackPanel устанавливает свойство DataContext-->
+                <StackPanel Background="#FFE5E5E5" DataContext = "{Binding ElementName=mySB1}">
+                    <Label Content="Move the scroll bar to see the current value"/>
+                    <ScrollBar Orientation="Horizontal" Height="30" Name="mySB1" Maximum = "100" LargeChange="1" SmallChange="1"/>
+                    <!--Теперь оба элемента пользовательского интерфейса работают
+                    со значением линейки прокрутки уникальными путями-->
+                    <Label Height="30" BorderBrush="Blue" BorderThickness="2" Content = "{Binding Path=Value}" ContentStringFormat="{}{0:F0}"/>
+                    <Button Content="Click" Height="200" FontSize = "{Binding Path=Value}"/>
+                </StackPanel>
             </TabItem>
         </TabControl>
     </DockPanel>
