@@ -6,14 +6,18 @@
         xmlns:local="clr-namespace:WpfApp"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="900">
-    
+
+    <Window.Resources>
+        <local:MyDoubleConverter x:Key="DoubleConverter"/>
+    </Window.Resources>
+
     <!-- Это информирует элемент управления Window о том, какие
     обработчики вызывать при поступлении команд Open и Save -->
     <Window.CommandBindings>
         <CommandBinding Command="ApplicationCommands.Open" Executed="OpenCmdExecuted" CanExecute="OpenCmdCanExecute"/>
         <CommandBinding Command="ApplicationCommands.Save" Executed="SaveCmdExecuted" CanExecute="SaveCmdCanExecute"/>
     </Window.CommandBindings>
-    
+
     <!-- Эта панель устанавливает содержимое окна -->
     <DockPanel>
         <Menu DockPanel.Dock = "Top" HorizontalAlignment="Left" Background="White" BorderBrush ="Black">
@@ -143,9 +147,9 @@
                     <!--Значение линейки прокрутки является источником этой привязки данных-->
                     <ScrollBar x:Name="mySB" Orientation="Horizontal" Height="30" Minimum = "1" Maximum = "100" LargeChange = "1" SmallChange = "1"/>
                     <!--Содержимое метки будет привязано к линейке прокрутки-->
-                    <Label x:Name="labelSBThumb" Height="30" BorderBrush="Blue" BorderThickness="2" Content = "{Binding Value, ElementName=mySB}" ContentStringFormat="The value is: {0:F0}"/>
+                    <Label Height="30" BorderBrush="Blue" BorderThickness="2" Content = "{Binding Value, ElementName=mySB}" ContentStringFormat="The value is: {0:F0}"/>
                     <!--Разбиение объекта и значения посредством DataContext-->
-                    <Label x:Name="labelSBThumb2" Height="30" BorderBrush="Blue" BorderThickness="2" DataContext = "{Binding ElementName=mySB}" Content = "{Binding Path=Value}"/>
+                    <Label Height="30" BorderBrush="Blue" BorderThickness="2" DataContext = "{Binding ElementName=mySB}" Content = "{Binding Path=Value}"/>
                 </StackPanel>
             </TabItem>
             <TabItem Header="DataContext">
@@ -156,6 +160,8 @@
                     <!--Теперь оба элемента пользовательского интерфейса работают
                     со значением линейки прокрутки уникальными путями-->
                     <Label Height="30" BorderBrush="Blue" BorderThickness="2" Content = "{Binding Path=Value}" ContentStringFormat="{}{0:F0}"/>
+                    <TextBox Height="30" BorderBrush="Blue" BorderThickness="2" Text = "{Binding Path=Value, Converter={StaticResource DoubleConverter}, Mode=TwoWay}" />
+                    <Label x:Name="labelSBThumb" Height="30" BorderBrush="Blue" BorderThickness="2" />
                     <Button Content="Click" Height="200" FontSize = "{Binding Path=Value}"/>
                 </StackPanel>
             </TabItem>

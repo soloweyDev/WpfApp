@@ -21,6 +21,7 @@ namespace WpfApp
         {
             InitializeComponent();
             SetFICommandBinding();
+            SetBindings();
 
             // Установить режим Ink в качестве стандартного.
             this.MyInkCanvas.EditingMode = InkCanvasEditingMode.Ink;
@@ -147,10 +148,7 @@ namespace WpfApp
 
         private void AddEventlnfo(object sender, RoutedEventArgs e)
         {
-            _mouseActivity += string.Format(
-            "{0} sent a {1} event named {2}.\n", sender,
-            e.RoutedEvent.RoutingStrategy,
-            e.RoutedEvent.Name);
+            _mouseActivity += string.Format("{0} sent a {1} event named {2}.\n", sender, e.RoutedEvent.RoutingStrategy, e.RoutedEvent.Name);
         }
 
         private void outerEllipse2_MouseDown(object sender, MouseButtonEventArgs e)
@@ -224,6 +222,35 @@ namespace WpfApp
         {
             // Очистить все штрихи.
             this.MyInkCanvas.Strokes.Clear();
+        }
+
+        private void SetBindings()
+        {
+            // Создать объект Binding.
+            Binding b = new Binding();
+            // Зарегистрировать преобразователь, источник и путь.
+            b.Converter = new MyDoubleConverter();
+            b.Source = this.mySB1;
+            b.Path = new PropertyPath("Value");
+            // Вызвать метод SetBindingO объекта Label.
+            this.labelSBThumb.SetBinding(Label.ContentProperty, b);
+        }
+    }
+
+    class MyDoubleConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            // Преобразовать значение double в int.
+            double v = (double)value;
+            return (int)v;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            // Поскольку заботиться о "двунаправленной" привязке
+            //не нужно, просто возвратить значение value.
+            return value;
         }
     }
 }
